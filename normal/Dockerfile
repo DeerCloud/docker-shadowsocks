@@ -42,26 +42,25 @@ LABEL maintainer="metowolf <i@i-meto.com>"
 
 ENV SERVER_ADDR 0.0.0.0
 ENV SERVER_PORT 8388
-ENV SERVER_PORT_OBFS 8139
 ENV PASSWORD=
 ENV METHOD aes-256-gcm
 ENV TIMEOUT 300
-ENV DNS_ADDRS 8.8.8.8,8.8.4.4
+ENV DNS 8.8.8.8,8.8.4.4
 ENV OBFS=
+ENV PLUGIN=
+ENV PLUGIN_OPTS=
 ENV ARGS=
 
 EXPOSE $SERVER_PORT/tcp
 EXPOSE $SERVER_PORT/udp
-EXPOSE $SERVER_PORT_OBFS/tcp
-EXPOSE $SERVER_PORT_OBFS/udp
 
-COPY --from=builder /usr/bin/ss-* /usr/bin/
-COPY --from=builder /usr/bin/obfs-* /usr/bin/
+COPY --from=builder /usr/bin/ss-* /usr/local/bin/
+COPY --from=builder /usr/bin/obfs-* /usr/local/bin/
 
 RUN apk add --no-cache \
     rng-tools \
     curl \
-    $(scanelf --needed --nobanner /usr/bin/ss-* \
+    $(scanelf --needed --nobanner /usr/local/bin/* \
     | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
     | sort -u)
 

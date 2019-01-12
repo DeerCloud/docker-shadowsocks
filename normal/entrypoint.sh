@@ -17,14 +17,23 @@ launch() {
 
 
   if [ ! -z "$OBFS" ]; then
-    echo -e "\033[33mobfs-server start!\033[0m"
-    obfs-server \
-      -s $SERVER_ADDR \
-      -p $SERVER_PORT_OBFS \
-      --obfs $OBFS \
-      -r 127.0.0.1:${SERVER_PORT} &
+    if [ "$OBFS" == "http" ]; then
+      PLUGIN="obfs-server"
+      PLUGIN_OPTS="obfs=http"
+      PLUGIN_CLIENT_OPTS="obfs%3Dhttp"
+    fi
+
+    if [ "$OBFS" == "tls" ]; then
+      PLUGIN="obfs-server"
+      PLUGIN_OPTS="obfs=tls"
+      PLUGIN_CLIENT_OPTS="obfs%3Dtls"
+    fi
   fi
-  
+
+  SERVER_PLUGIN=""
+  if [ ! -z "$PLUGIN" ]; then
+    SERVER_PLUGIN="--plugin ${PLUGIN} --plugin-opts ${PLUGIN_OPTS}"
+  fi
 
   SCHEME_USER_INFO=`echo -n "$METHOD:$PASSWORD" | base64 | sed 's/+/-/g;s/\//_/g'`
   SCHEME="ss://${SCHEME_USER_INFO}@${GLOBAL_ADDR}:${SERVER_PORT}"
@@ -33,13 +42,14 @@ launch() {
   echo -e "\033[32m  server address:\033[0m ${GLOBAL_ADDR}"
   echo -e "\033[32m  method:\033[0m ${METHOD}"
   echo -e "\033[32m  password:\033[0m ${PASSWORD}"
+  echo -e "\033[32m  dns:\033[0m ${DNS}"
   if [ ! -z "$OBFS" ]; then
     echo -e "\033[32m  obfs:\033[0m ${OBFS}"
   fi
   echo ""
   echo -e "\033[32m  ss://${SCHEME_USER_INFO}@${GLOBAL_ADDR}:\033[31m${SERVER_PORT}\033[32m\033[0m"
   if [ ! -z "$OBFS" ]; then
-    echo -e "\033[32m  ss://${SCHEME_USER_INFO}@${GLOBAL_ADDR}:\033[31m${SERVER_PORT_OBFS}\033[32m/?plugin=obfs-local%3Bobfs%3D\033[31m${OBFS}\033[32m\033[0m"
+    echo -e "\033[32m  ss://${SCHEME_USER_INFO}@${GLOBAL_ADDR}:\033[31m${SERVER_PORT_OBFS}\033[32m/?plugin=${PLUGIN}%3B\033[31m${PLUGIN_CLIENT_OPTS}\033[32m\033[0m"
   fi
   echo ""
   echo -e "\033[32m  !! replace \033[31m${SERVER_PORT}\033[32m to your different port.\033[0m"
@@ -54,8 +64,9 @@ launch() {
     -t $TIMEOUT \
     --fast-open \
     --reuse-port \
-    -d $DNS_ADDRS \
+    -d $DNS \
     -u \
+    $SERVER_PLUGIN \
     $ARGS
 }
 

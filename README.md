@@ -24,6 +24,12 @@
 |deercloud/shadowsocks:current|
 |deercloud/shadowsocks:3.2.3|
 
+|version|
+|---|
+|deercloud/shadowsocks:latest-full|
+|deercloud/shadowsocks:current-full|
+|deercloud/shadowsocks:3.2.3-full|
+
 
 ## environment variables
 
@@ -31,12 +37,13 @@
 |---|---|
 |SERVER_ADDR|0.0.0.0|
 |SERVER_PORT|8388|
-|SERVER_PORT_OBFS|8139|
 |**PASSWORD**|[RANDOM]|
 |**METHOD**|aes-256-gcm|
 |TIMEOUT|300|
-|**DNS_ADDRS**|8.8.8.8,8.8.4.4|
+|**DNS**|8.8.8.8,8.8.4.4|
 |**OBFS**|-|
+|PLUGIN|-|
+|PLUGIN_OBFS|-|
 |ARGS|-|
 
 ***
@@ -81,12 +88,10 @@ ss-server start!
  2019-01-05 11:44:28 INFO: running from root user
 ```
 
-### With custom variables
-
-443 & simple-obfs tls
+### With simple-obfs
 
 ```bash
-$ docker run -p 443:8139 -p 443:8139/udp -d \
+$ docker run -p 443:8388 -p 443:8388/udp -d \
   -e PASSWORD=deercloud \
   -e METHOD=chacha20-ietf-poly1305 \
   -e OBFS=tls \
@@ -127,4 +132,77 @@ ss-server start!
  2019-01-05 11:49:51 INFO: running from root user
 ```
 
- > :warning: change `:8388`, `:8139` to your custom port `:443`.
+ > :warning: change `:8388` to your custom port `:443`.
+
+### With v2ray-plugin (full images only)
+
+```bash
+$ docker run -p 443:8388 -p 443:8388/udp -d \
+ -e PASSWORD=deercloud \
+ -e METHOD=chacha20-ietf-poly1305 \
+ -e OBFS=ws \
+ --restart always --name=shadowsocks deercloud/shadowsocks
+```
+
+show connection link
+
+```bash
+$ docker logs shadowsocks
+
+Using explicitly passed password: deercloud
+
+  server address: 101.6.6.6
+  method: chacha20-ietf-poly1305
+  password: deercloud
+  obfs: ws
+
+  ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpkZWVyY2xvdWQ=@101.6.6.6:8388
+  ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpkZWVyY2xvdWQ=@101.6.6.6:/?plugin=v2ray-plugin%3B
+
+  !! replace 8388 to your different port.
+
+ss-server start!
+ 2019-01-12 05:40:34 INFO: using tcp fast open
+ 2019-01-12 05:40:34 INFO: plugin "v2ray-plugin" enabled
+ 2019-01-12 05:40:34 INFO: UDP relay enabled
+ 2019-01-12 05:40:34 INFO: initializing ciphers... chacha20-ietf-poly1305
+ 2019-01-12 05:40:34 INFO: using nameserver: 8.8.8.8,8.8.4.4
+ 2019-01-12 05:40:34 INFO: tcp server listening at 127.0.0.1:49937
+ 2019-01-12 05:40:34 INFO: tcp port reuse enabled
+ 2019-01-12 05:40:34 INFO: udp server listening at 0.0.0.0:8388
+ 2019-01-12 05:40:34 INFO: udp port reuse enabled
+ 2019-01-12 05:40:34 INFO: running from root user
+2019/01/12 05:40:34 V2Ray 4.12 (Po) Custom
+2019/01/12 05:40:34 A unified platform for anti-censorship.
+2019/01/12 05:40:34
+{
+    "inbounds": [{
+        "listen": "0.0.0.0",
+        "port": 8388,
+        "protocol": "dokodemo-door",
+        "settings": {
+            "address": "v1.mux.cool",
+            "network": "tcp"
+        },
+        "streamSettings": {
+            "network": "ws",
+            "wsSettings": {
+                "path": "/",
+                "headers": {
+                    "Host": "cloudfront.com"
+                }
+            }
+        }
+    }],
+    "outbounds": [{
+        "protocol": "freedom",
+        "settings": {
+            "redirect": "127.0.0.1:49937"
+        }
+    }]
+}
+
+2019/01/12 05:40:34 [Warning] v2ray.com/core: V2Ray 4.12 started
+```
+
+> :warning: change `:8388` to your custom port `:443`.
