@@ -140,7 +140,7 @@ ss-server start!
 $ docker run -p 443:8388 -p 443:8388/udp -d \
  -e PASSWORD=deercloud \
  -e METHOD=chacha20-ietf-poly1305 \
- -e OBFS=ws \
+ -e OBFS=websocket \
  --restart always --name=shadowsocks deercloud/shadowsocks
 ```
 
@@ -154,7 +154,7 @@ Using explicitly passed password: deercloud
   server address: 101.6.6.6
   method: chacha20-ietf-poly1305
   password: deercloud
-  obfs: ws
+  obfs: websocket
 
   ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpkZWVyY2xvdWQ=@101.6.6.6:8388
   ss://Y2hhY2hhMjAtaWV0Zi1wb2x5MTMwNTpkZWVyY2xvdWQ=@101.6.6.6:/?plugin=v2ray-plugin%3B
