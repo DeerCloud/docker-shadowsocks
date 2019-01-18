@@ -40,7 +40,7 @@ FROM golang:alpine as v2ray-builder
 
 LABEL maintainer="metowolf <i@i-meto.com>"
 
-ENV VERSION 20190114
+ENV VERSION 1.0
 
 RUN apk add git \
     && cd /go/src \
