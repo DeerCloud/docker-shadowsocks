@@ -24,12 +24,6 @@
 |deercloud/shadowsocks:current|
 |deercloud/shadowsocks:3.2.3|
 
-|version|
-|---|
-|deercloud/shadowsocks:latest-full|
-|deercloud/shadowsocks:current-full|
-|deercloud/shadowsocks:3.2.3-full|
-
 
 ## environment variables
 
@@ -134,7 +128,7 @@ ss-server start!
 
  > :warning: change `:8388` to your custom port `:443`.
 
-### With v2ray-plugin (full images only)
+### With v2ray-plugin
 
 ```bash
 $ docker run -p 443:8388 -p 443:8388/udp -d \

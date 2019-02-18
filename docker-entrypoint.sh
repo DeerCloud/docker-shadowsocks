@@ -48,9 +48,9 @@ launch() {
     echo -e "\033[32m  obfs:\033[0m ${OBFS}"
   fi
   echo ""
-  echo -e "\033[32m  ss://${SCHEME_USER_INFO}@IP:\033[31m${SERVER_PORT}\033[32m\033[0m"
+  echo -e "\033[32m  ss://${SCHEME_USER_INFO}@\033[31mIP:${SERVER_PORT}\033[32m\033[0m"
   if [ ! -z "$OBFS" ]; then
-    echo -e "\033[32m  ss://${SCHEME_USER_INFO}@\033[31mIP:${SERVER_PORT_OBFS}\033[32m/?plugin=${PLUGIN}%3B\033[31m${PLUGIN_CLIENT_OPTS}\033[32m\033[0m"
+    echo -e "\033[32m  ss://${SCHEME_USER_INFO}@\033[31mIP:${SERVER_PORT}\033[32m/?plugin=${PLUGIN}%3B\033[31m${PLUGIN_CLIENT_OPTS}\033[32m\033[0m"
   fi
   echo ""
   echo -e "\033[32m  !! replace \033[31mIP:${SERVER_PORT}\033[32m to your public ip & port.\033[0m"
