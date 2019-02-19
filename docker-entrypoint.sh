@@ -19,10 +19,16 @@ launch() {
       PLUGIN_CLIENT_OPTS="obfs%3Dtls"
     fi
 
-    if [ "$OBFS" == "websocket" ]; then
+    if [ "$OBFS" == "ws" ]; then
       PLUGIN="v2ray-plugin"
       PLUGIN_OPTS="server"
       PLUGIN_CLIENT_OPTS=""
+    fi
+
+    if [ "$OBFS" == "wss" ]; then
+      PLUGIN="v2ray-plugin"
+      PLUGIN_OPTS="server;tls"
+      PLUGIN_CLIENT_OPTS="tls"
     fi
 
     if [ "$OBFS" == "quic" ]; then
