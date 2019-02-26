@@ -2,7 +2,7 @@ FROM alpine:edge AS ss-builder
 
 LABEL maintainer="metowolf <i@i-meto.com>"
 
-ENV SS_VERSION 3.2.3
+ENV SS_VERSION 3.2.4
 ENV SS_OBFS_VERSION 0.0.5
 
 RUN apk upgrade \
