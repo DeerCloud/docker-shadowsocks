@@ -1,9 +1,9 @@
-FROM alpine:edge AS ss-builder
+FROM alpine:3.9 AS ss-builder
 
 LABEL maintainer="metowolf <i@i-meto.com>"
 
-ENV SS_VERSION 3.2.5
-ENV SS_OBFS_VERSION 0.0.5
+ARG SS_VERSION=3.2.5
+ARG SS_OBFS_VERSION=0.0.5
 
 RUN apk upgrade \
     && apk add \
@@ -40,7 +40,7 @@ FROM golang:alpine AS v2ray-builder
 
 LABEL maintainer="metowolf <i@i-meto.com>"
 
-ENV VERSION 1.1.0
+ARG VERSION=1.1.0
 
 RUN apk upgrade \
     && apk add \
@@ -54,7 +54,7 @@ RUN apk upgrade \
     && tar xzvf v${VERSION}.tar.gz \
     && cd v2ray-plugin-${VERSION} \
     && go build -ldflags "-s -w" \
-    && upx --brute v2ray-plugin \
+    && upx v2ray-plugin \
     && mv v2ray-plugin /usr/local/bin/
 
 
@@ -86,4 +86,6 @@ RUN apk add --no-cache \
 COPY --from=v2ray-builder /usr/local/bin/v2ray-* /usr/local/bin/
 
 COPY docker-entrypoint.sh /usr/local/bin/
+
+CMD ["auto"]
 ENTRYPOINT ["docker-entrypoint.sh"]

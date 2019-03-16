@@ -1,4 +1,5 @@
 #!/bin/sh
+set -e
 
 launch() {
 
@@ -76,9 +77,10 @@ launch() {
     $ARGS
 }
 
-
-if [ -z "$@" ]; then
+if [ "$1" == "auto" ]; then
   launch
+elif [ "${1#-}" != "$1" ]; then
+	exec ss-server "$@"
 else
   exec "$@"
 fi
