@@ -1,8 +1,8 @@
-FROM alpine:3.9 AS ss-builder
+FROM alpine:edge AS ss-builder
 
 LABEL maintainer="metowolf <i@i-meto.com>"
 
-ARG SS_VERSION=3.2.5
+ARG SS_VERSION=3.3.1
 ARG SS_OBFS_VERSION=0.0.5
 
 RUN apk upgrade \
@@ -58,7 +58,7 @@ RUN apk upgrade \
     && mv v2ray-plugin /usr/local/bin/
 
 
-FROM alpine:3.9
+FROM alpine:3.10
 
 LABEL maintainer="metowolf <i@i-meto.com>"
 

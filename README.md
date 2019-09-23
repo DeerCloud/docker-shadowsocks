@@ -22,7 +22,7 @@
 |---|
 |deercloud/shadowsocks:latest|
 |deercloud/shadowsocks:current|
-|deercloud/shadowsocks:3.2.3|
+|deercloud/shadowsocks:3.3.1|
 
 
 ## environment variables
