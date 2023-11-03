@@ -8,7 +8,7 @@ launch() {
     echo "PASSWORD=$PASSWORD"
   fi
 
-  ss-server \
+  ssserver \
     -s $SERVER_ADDR:$SERVER_PORT \
     -k $PASSWORD \
     -m $METHOD \
