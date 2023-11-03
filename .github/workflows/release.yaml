@@ -1,11 +1,9 @@
 name: Docker Build
 
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - 'README.md'
+  release:
+    types:
+      - published
 
 env:
   IMAGE_REGISTRY: docker.io
@@ -26,6 +24,10 @@ jobs:
         with:
           token: ${{ github.token }}
       - 
+        name: Process Version
+        id: version
+        uses: ncipollo/semantic-version-action@v1
+      - 
         name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - 
@@ -44,5 +46,8 @@ jobs:
           file: Dockerfile
           platforms: linux/amd64,linux/arm64
           tags: |
-            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:dev
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:latest
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.major }}
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}/${{ env.IMAGE_NAME }}:${{ steps.version.outputs.major }}.${{ steps.version.outputs.minor }}.${{ steps.version.outputs.patch }}
           push: true
